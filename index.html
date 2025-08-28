@@ -1,13 +1,26 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Flappy Bird</title>
-  <link rel="stylesheet" href="style.css">
+  
+  <!-- Manifest para PWA -->
+  <link rel="manifest" href="manifest.json" />
+
+  <!-- Tema de color para móviles -->
+  <meta name="theme-color" content="#70c5ce" />
+
+  <!-- Estilo -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Ícono para navegadores -->
+  <link rel="icon" href="https://e7.pngegg.com/pngimages/21/679/png-clipart-flappy-bird-pixel-art-minecraft-mallard-pipe-flappy-bird-text-photography.png" />
 </head>
 <body>
   <canvas id="gameCanvas" width="400" height="600"></canvas>
+
+  <!-- Script principal -->
   <script src="script.js"></script>
 </body>
 </html>
