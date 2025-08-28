@@ -115,7 +115,7 @@ function gameLoop() {
 }
 
 // Controls
-document.addEventListener("keydown", (e) => {
+document.addEventListener("click", (e) => {
   if (e.code === "Space") {
     bird.velocity = bird.lift;
     if (gameOver) {
@@ -135,3 +135,4 @@ document.addEventListener("keydown", (e) => {
 birdImage.onload = function() {
   gameLoop();
 };
+
