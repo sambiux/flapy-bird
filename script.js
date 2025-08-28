@@ -3,14 +3,14 @@ const ctx = canvas.getContext("2d");
 
 // Cargar imagen del pájaro
 const birdImage = new Image();
-birdImage.src = 'images/pajaro.png'; // Ruta de la imagen
+birdImage.src = 'images/bird.png'; // Asegúrate de tener esta imagen en la carpeta correcta
 
 // Bird
 let bird = {
-  x: 120,
+  x: 80,
   y: 150,
-  width: 30,   // Ajusta el tamaño de acuerdo con la imagen
-  height: 30,  // Ajusta el tamaño de acuerdo con la imagen
+  width: 30,
+  height: 30,
   gravity: 0.6,
   lift: -10,
   velocity: 0
@@ -27,7 +27,6 @@ let score = 0;
 let gameOver = false;
 
 function drawBird() {
-  // Dibuja la imagen del pájaro en vez de un rectángulo
   ctx.drawImage(birdImage, bird.x, bird.y, bird.width, bird.height);
 }
 
@@ -63,7 +62,7 @@ function updatePipes() {
   pipes.forEach(pipe => {
     pipe.x -= 2;
 
-    // Check collision
+    // Colisión
     if (
       bird.x < pipe.x + pipeWidth &&
       bird.x + bird.width > pipe.x &&
@@ -72,14 +71,13 @@ function updatePipes() {
       gameOver = true;
     }
 
-    // Update score
+    // Puntaje
     if (!pipe.passed && pipe.x + pipeWidth < bird.x) {
       score++;
       pipe.passed = true;
     }
   });
 
-  // Remove pipes off screen
   pipes = pipes.filter(pipe => pipe.x + pipeWidth > 0);
 }
 
@@ -114,26 +112,55 @@ function gameLoop() {
   }
 }
 
-// Controls
-document.addEventListener("touchstart", (e) => {
-  if (e.code === "Space") {
-    bird.velocity = bird.lift;
-    if (gameOver) {
-      // Reset game
-      bird.y = 150;
-      bird.velocity = 0;
-      pipes = [];
-      frame = 0;
-      score = 0;
-      gameOver = false;
-      gameLoop();
-    }
+// Función para que el pájaro "vuele"
+function flap() {
+  bird.velocity = bird.lift;
+  if (gameOver) {
+    // Reiniciar juego
+    bird.y = 150;
+    bird.velocity = 0;
+    pipes = [];
+    frame = 0;
+    score = 0;
+    gameOver = false;
+    gameLoop();
+  }
+}
+
+// Eventos para móvil y desktop
+
+// Toque en móvil
+window.addEventListener('touchstart', (e) => {
+  e.preventDefault(); // Evita scroll o zoom al tocar
+  flap();
+}, { passive: false });
+
+// Click en desktop
+window.addEventListener('click', (e) => {
+  flap();
+});
+
+// Teclado (barra espaciadora)
+window.addEventListener('keydown', (e) => {
+  if (e.code === 'Space') {
+    flap();
   }
 });
 
-// Start the game when the image is loaded
-birdImage.onload = function() {
+// Iniciar juego cuando se cargue la imagen
+birdImage.onload = function () {
   gameLoop();
 };
 
-
+// Registrar Service Worker para PWA
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('service-worker.js')
+      .then(reg => {
+        console.log('Service Worker registrado con éxito:', reg.scope);
+      })
+      .catch(err => {
+        console.error('Error al registrar el Service Worker:', err);
+      });
+  });
+}
